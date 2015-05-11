@@ -15,7 +15,30 @@ var board=
   "/......../"+
   "/PPPPPPPP/"+
   "/RNBQKBNR/"+
-  "//////////"
+  "//////////";
+
+var key={
+  "p":1,"n":3,"b":5,"r":7,"q":20,"k":100,
+  "P":-1,"N":-3,"B":-5,"R":-7,"Q":-20,"K":-100
+};
+
+var m={
+  "UP":10,
+  "DOWN":-10,
+  "RIGHT":1,
+  "LEFT":-1
+};
+
+var moves={
+  "p":[m.UP,m.UP*2,m.UP+m.RIGHT,m.UP+m.LEFT],
+  "n":3,
+  "b":5,
+  "r":7,
+  "q":20,
+  "k":100
+};
+
+console.log(moves["p"][0]);
 
 function print_board(board){
   offset=11;
@@ -32,10 +55,6 @@ function print_board(board){
 function eval_board(board){
   score=0;
   ///material
-  key={
-    "p":1,"n":3,"b":5,"r":7,"q":20,"k":100,
-    "P":-1,"N":-3,"B":-5,"R":-7,"Q":-20,"K":-100
-  };
   for (x=0;x<board.length;++x){
     for (property in key){
       if (board[x]==property){
@@ -57,7 +76,15 @@ function prompt_move(){
   return ret;
 }
 
-
+function gen_moves(board){
+  for (x=0;x<board.length;++x){
+    for (piece in moves){
+      if (board[x]==piece){
+        check(moves[piece]);
+      }
+    }
+  }
+}
 
 function main_loop(board){
   print_board(board);
