@@ -191,7 +191,12 @@ function rbq(piece,x,mov){
   ){
     while (board[x+mov*idx]!='/'){
       gen.push(enemy_gen(piece,x,mov*idx));
-      idx+=1;
+      if (!space(x,mov*idx)){
+        break;
+      }
+      else{
+        idx+=1;
+      }
     }
   }
   return gen;
@@ -254,7 +259,7 @@ function render_move(li){
 function print_gen(gen){
   console.log("there are "+gen.length+" moves gened");
   for (var x in gen){
-    //console.log(gen[x]);
+    console.log(gen[x]);
   }
 }
 
