@@ -1,9 +1,4 @@
-var readline = require('readline');
-var rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout,
-  terminal: true
-});
+
 
 var board=
   "//////////"+
@@ -69,12 +64,8 @@ function eval_board(board){
 
 function prompt_move(){
   ret=""
-  console.log("your move: ");
-  rl.resume();
-  rl.on('line', function(line){
-    ret=line;
-    rl.pause();
-  });
+  ret=prompt("your move: ");
+  console.log(ret);
   return ret;
 }
 
@@ -217,16 +208,21 @@ function interpret_coord(coord){
   return l;
 }
 
+String.prototype.replaceAt=function(index, character) {
+  return this.substr(0, index) + character + this.substr(index+character.length);
+}
+
 function render_move(li){
-  board[li[1]]=board[li[0]];
-  board[li[0]]='.';
+  board.replaceAt(li[1],board[li[0]]);
+  board.replaceAt(li[0],'.');
 }
 
 function main_loop(board){
   print_board(board);
   eval_board(board);
   render_move(interpret_coord(prompt_move()));
-  console.log(gen_moves(board));
+  print_board(board);
+  //console.log(gen_moves(board));
 }
 
 main_loop(board);
