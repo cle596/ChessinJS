@@ -18,10 +18,10 @@ var key={
 };
 
 var m={
-  "UP":10,
-  "DOWN":-10,
-  "RIGHT":1,
-  "LEFT":-1
+  "UP":-10,
+  "DOWN":10,
+  "RIGHT":-1,
+  "LEFT":1
 };
 
 var moves={
@@ -70,7 +70,7 @@ function prompt_move(){
 }
 
 function space(x,mov){
-  if (x+mov=='.'){
+  if (board[x+mov]=='.'){
     return true;
   }
   else{
@@ -101,12 +101,6 @@ function isPiece(str) {
 }
 
 function enemy(piece,x,mov){
-  try{
-    isLowerCase(piece);
-  }
-  catch(err){
-    console.log("err with : "+piece);
-  }
   if ( isPiece(piece) &&
     ((isUpperCase(piece) && isUpperCase(board[x+mov]))
     || (isLowerCase(piece) && isLowerCase(board[x+mov])))
@@ -160,8 +154,8 @@ function nk_enemy(gen,piece,x,mov){
 }
 
 function rbq(gen,piece,x,mov){
-  idx=0;
-  while (x+mov!='/'){
+  idx=1;
+  while (x+mov*idx!='/'){
     gen=enemy_gen(gen,piece,x,mov*idx);
     idx+=1;
   }
@@ -170,18 +164,19 @@ function rbq(gen,piece,x,mov){
 
 function check(board,x,piece,moves){
   gen=[];
-  for (mov in moves){
-    not_rbq_empty_gen(gen,piece,x,mov);
-    pawn_enemy(gen,piece,x,mov);
-    nk_enemy(gen,piece,x,mov);
-    rbq(gen,piece,x,mov);
+  for (m in moves){
+    not_rbq_empty_gen(gen,piece,x,moves[m]);
+    pawn_enemy(gen,piece,x,moves[m]);
+    nk_enemy(gen,piece,x,moves[m]);
+    rbq(gen,piece,x,moves[m]);
   }
+  console.log(gen);
   return gen;
 }
 
 function gen_moves(board){
   gen=[];
-  for (x=0;x<board.length;++x){
+  for (x=21;x<22/*board.length*/;++x){
     for (piece in moves){
       if (board[x]==piece){
         gen.push(check(board,x,piece,moves[piece]));
@@ -223,7 +218,7 @@ function main_loop(board){
   eval_board(board);
   board=render_move(interpret_coord(prompt_move()));
   print_board(board);
-  //console.log(gen_moves(board));
+  console.log(gen_moves(board));
 }
 
 main_loop(board);
