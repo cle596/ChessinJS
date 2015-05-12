@@ -27,11 +27,19 @@ var m={
 var moves={
   "P":[m.UP,m.UP*2,m.UP+m.RIGHT,m.UP+m.LEFT],
   "p":[m.DOWN,m.DOWN*2,m.DOWN+m.RIGHT,m.DOWN+m.LEFT],
+  "N":[m.UP*2+m.RIGHT,m.UP+m.RIGHT*2,m.RIGHT*2+m.DOWN,m.RIGHT+m.DOWN*2,
+    m.DOWN*2+m.LEFT,m.DOWN+m.LEFT*2,m.LEFT*2+m.UP,m.LEFT+m.UP*2],
   "n":[m.UP*2+m.RIGHT,m.UP+m.RIGHT*2,m.RIGHT*2+m.DOWN,m.RIGHT+m.DOWN*2,
     m.DOWN*2+m.LEFT,m.DOWN+m.LEFT*2,m.LEFT*2+m.UP,m.LEFT+m.UP*2],
+  "B":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT],
   "b":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT],
+  "R":[m.UP,m.RIGHT,m.DOWN,m.LEFT],
   "r":[m.UP,m.RIGHT,m.DOWN,m.LEFT],
+  "Q":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT,
+    m.UP,m.RIGHT,m.DOWN,m.LEFT],
   "q":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT,
+    m.UP,m.RIGHT,m.DOWN,m.LEFT],
+  "K":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT,
     m.UP,m.RIGHT,m.DOWN,m.LEFT],
   "k":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT,
     m.UP,m.RIGHT,m.DOWN,m.LEFT]
@@ -125,15 +133,17 @@ function replace(x,mov){
   board[x]='.';
 }
 
-function not_rbq_empty_gen(piece,x,mov){
+function nk_empty_gen(piece,x,mov){
+  var gen;
   gen=[];
-  if (!(piece in ["R","r","B","b","Q","q"]) && space(x,mov)){
+  if ((piece in ["N","n","K","k"]) && space(x,mov)){
     gen.push(format_move(piece,x,mov));
   }
   return gen;
 }
 
 function enemy_gen(piece,x,mov){
+  var gen;
   gen=[];
   if (enemy(piece,x,mov)){
     gen.push(format_move(piece,x,mov));
@@ -141,15 +151,28 @@ function enemy_gen(piece,x,mov){
   return gen;
 }
 
-function pawn_enemy(piece,x,mov){
+function pawn_empty_gen(piece,x,mov){
+  var gen;
   gen=[];
-  if ((piece in ['P','p']) && (mov in moves[piece].slice(2,4))){
+  if ((piece in ["P","p"]) && (mov in moves[piece].slice(0,2))
+  && space(x,mov)){
+    gen.push(format_move(piece,x,mov));
+  }
+  return gen;
+}
+
+function pawn_enemy(piece,x,mov){
+  var gen;
+  gen=[];
+  if ((piece in ['P','p']) && (mov in moves[piece].slice(2,4))
+  && enemy(piece,x,mov)){
     gen.push(enemy_gen(piece,x,mov));
   }
   return gen;
 }
 
 function nk_enemy(piece,x,mov){
+  var gen;
   gen=[];
   if ((piece in ['N','n','K','k']) && (mov in moves[piece])){
     gen.push(enemy_gen(piece,x,mov));
@@ -158,6 +181,7 @@ function nk_enemy(piece,x,mov){
 }
 
 function rbq(piece,x,mov){
+  var gen;
   gen=[];
   idx=1;
   if (piece in ['R','r','B','b','Q','q']){
@@ -170,22 +194,25 @@ function rbq(piece,x,mov){
 }
 
 function check(board,x,piece,moves){
+  var gen;
   gen=[];
   for (m in moves){
-    gen.push(not_rbq_empty_gen(piece,x,moves[m]));
-    gen.push(pawn_enemy(piece,x,moves[m]));
-    gen.push(nk_enemy(piece,x,moves[m]));
-    gen.push(rbq(piece,x,moves[m]));
+    gen.push.apply(gen,nk_empty_gen(piece,x,moves[m]));
+    gen.push.apply(gen,pawn_empty_gen(piece,x,moves[m]));
+    gen.push.apply(gen,pawn_enemy(piece,x,moves[m]));
+    gen.push.apply(gen,nk_enemy(piece,x,moves[m]));
+    gen.push.apply(gen,rbq(piece,x,moves[m]));
   }
   return gen;
 }
 
 function gen_moves(board){
+  var gen;
   gen=[];
-  for (x=21;x<22/*board.length*/;++x){
+  for (x=0;x<board.length;++x){
     for (piece in moves){
       if (board[x]==piece){
-        gen.push(check(board,x,piece,moves[piece]));
+        gen.push.apply(gen,check(board,x,piece,moves[piece]));
       }
     }
   }
@@ -203,6 +230,7 @@ row={
 };
 
 function interpret_coord(coord){
+  var l;
   l=[];
   l.push(col[coord[0]]+row[coord[1]]);
   l.push(col[coord[2]]+row[coord[3]]);
@@ -219,12 +247,19 @@ function render_move(li){
   return board;
 }
 
+function print_gen(gen){
+  console.log("there are "+gen.length+" moves gened");
+  for (var x in gen){
+    //console.log(gen[x]);
+  }
+}
+
 function main_loop(board){
   print_board(board);
   eval_board(board);
   board=render_move(interpret_coord(prompt_move()));
   print_board(board);
-  console.log(gen_moves(board));
+  print_gen(gen_moves(board));
 }
 
 main_loop(board);
