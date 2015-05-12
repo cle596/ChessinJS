@@ -86,17 +86,12 @@ function space(x,mov){
   }
 }
 
-function isUpperCase(str) {
+function isUpperCase(str,x,mov) {
   return str === str.toUpperCase();
 }
 
 function isLowerCase(str) {
-  try{
-    return str === str.toLowerCase();
-  }
-  catch(err){
-
-  }
+  return str === str.toLowerCase();
 }
 
 function isPiece(str) {
@@ -109,8 +104,7 @@ function isPiece(str) {
 }
 
 function enemy(piece,x,mov){
-  if ( isPiece(piece) &&
-    ((isUpperCase(piece) && isUpperCase(board[x+mov]))
+  if (((isUpperCase(piece,x,mov) && isUpperCase(board[x+mov],x,mov))
     || (isLowerCase(piece) && isLowerCase(board[x+mov])))
   ){
     return false;
@@ -160,7 +154,6 @@ function pawn_empty_gen(piece,x,mov){
   ($.inArray(piece, ["P","p"])!=-1)
   && ($.inArray(mov, moves[piece].slice(0,2))!=-1)
   && space(x,mov)){
-    console.log("pawn empty");
     gen.push(format_move(piece,x,mov));
   }
   return gen;
@@ -170,7 +163,7 @@ function pawn_enemy(piece,x,mov){
   var gen;
   gen=[];
   if (
-  $.inArray(piece, ['P','p']!=-1)
+  ($.inArray(piece, ['P','p'])!=-1)
   && ($.inArray(mov, moves[piece].slice(2,4))!=-1)
   && enemy(piece,x,mov)){
     gen.push(enemy_gen(piece,x,mov));
