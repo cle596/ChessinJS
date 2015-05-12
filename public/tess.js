@@ -154,8 +154,11 @@ function enemy_gen(piece,x,mov){
 function pawn_empty_gen(piece,x,mov){
   var gen;
   gen=[];
-  if ((piece in ["P","p"]) && (mov in moves[piece].slice(0,2))
+  console.log($.inArray(mov, moves[piece].slice(0,2)));
+  if ((piece in ["P","p"])
+  && ($.inArray(mov, moves[piece].slice(0,2))!=-1)
   && space(x,mov)){
+    console.log("pawn empty");
     gen.push(format_move(piece,x,mov));
   }
   return gen;
