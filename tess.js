@@ -38,8 +38,6 @@ var moves={
   "k":100
 };
 
-console.log(moves["p"][0]);
-
 function print_board(board){
   offset=11;
   i=offset;
@@ -76,11 +74,92 @@ function prompt_move(){
   return ret;
 }
 
+function space(x,mov){
+  if (x+mov=='.'){
+    return true;
+  }
+  else{
+    return false;
+  }
+}
+
+function isUpperCase(str) {
+  return str === str.toUpperCase();
+}
+
+function isLowerCase(str) {
+  return str === str.toLowerCase();
+}
+
+function isPiece(str) {
+  if (str=="." || str=="/"){
+    return false;
+  }
+  else{
+    return true;
+  }
+}
+
+function enemy(piece,x,mov){
+  if ( isPiece(piece) &&
+    ((isUpperCase(piece) && isUpperCase(board[x+mov]))
+    || (isLowerCase(piece) && isLowerCase(board[x+mov])))
+  ){
+    return false;
+  }
+  else {
+    return true;
+  }
+}
+
+function format_move(piece,x,mov){
+  return {
+    "piece":piece,
+    "from":x,
+    "to":x+mov
+  };
+}
+
+function replace(x,x+mov){
+  board[x+mov]=board[x];
+  board[x]='.';
+}
+
+function empty_gen(gen,x,mov){
+  if (space(x,mov)){
+    gen.push(format_move(piece,x,mov));
+  }
+}
+
+function enemy_gen(gen,piece,x,mov){
+  if (enemy(piece,x,mov)){
+    gen.push(format_move(piece,x,mov));
+  }
+}
+
+l3=['n'];
+l4=['b','r','q'];
+function check(board,x,piece,moves){
+  gen=[];
+  if (piece in ['p','k']){
+    for (mov in moves){
+      empty_gen(gen,x,mov);
+      if (piece in ['p'] && mov in moves.slice(2,4)){
+        enemy_gen(gen,piece,x,mov);
+      }
+    }
+  }
+  else if (piece in ['n']){
+  }
+  else if (piece in ['b','r','q']){
+  }
+}
+
 function gen_moves(board){
   for (x=0;x<board.length;++x){
     for (piece in moves){
       if (board[x]==piece){
-        check(moves[piece]);
+        check(board,x,piece,moves[piece]);
       }
     }
   }
