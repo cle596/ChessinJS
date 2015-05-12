@@ -30,12 +30,14 @@ var m={
 };
 
 var moves={
-  "p":[m.UP,m.UP*2,m.UP+m.RIGHT,m.UP+m.LEFT],
-  "n":3,
-  "b":5,
-  "r":7,
-  "q":20,
-  "k":100
+  "P":[m.UP,m.UP*2,m.UP+m.RIGHT,m.UP+m.LEFT],
+  "p":[m.DOWN,m.DOWN*2,m.DOWN+m.RIGHT,m.DOWN+m.LEFT],
+  "N":[m.UP*2+m.RIGHT,m.UP+m.RIGHT*2,m.RIGHT*2+m.DOWN,m.RIGHT+m.DOWN*2,
+    m.DOWN*2+m.LEFT,m.DOWN+m.LEFT*2,m.LEFT*2+m.UP,m.LEFT+m.UP*2],
+  "B":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT],
+  "r":[m.UP,m.RIGHT,m.DOWN,m.LEFT],
+  "q":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT,
+    m.UP,m.RIGHT,m.DOWN,m.LEFT]
 };
 
 function print_board(board){
@@ -137,21 +139,13 @@ function enemy_gen(gen,piece,x,mov){
   }
 }
 
-l3=['n'];
-l4=['b','r','q'];
 function check(board,x,piece,moves){
   gen=[];
-  if (piece in ['p','k']){
-    for (mov in moves){
-      empty_gen(gen,x,mov);
-      if (piece in ['p'] && mov in moves.slice(2,4)){
-        enemy_gen(gen,piece,x,mov);
-      }
+  for (mov in moves){
+    empty_gen(gen,x,mov);
+    if ((piece in ['P']) && (mov in moves.slice(2,4))){
+      enemy_gen(gen,piece,x,mov);
     }
-  }
-  else if (piece in ['n']){
-  }
-  else if (piece in ['b','r','q']){
   }
 }
 
