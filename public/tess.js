@@ -192,13 +192,13 @@ function gen_moves(board){
 }
 
 col={
-  "a":0,"b":1,"c":2,"d":3,
-  "e":4,"f":5,"g":6,"h":7
+  "a":1,"b":2,"c":3,"d":4,
+  "e":5,"f":6,"g":7,"h":8
 };
 
 row={
-  "1":10,"2":20,"3":30,"4":40,
-  "5":50,"6":60,"7":70,"8":80
+  "1":80,"2":70,"3":60,"4":50,
+  "5":40,"6":30,"7":20,"8":10
 };
 
 function interpret_coord(coord){
@@ -213,14 +213,15 @@ String.prototype.replaceAt=function(index, character) {
 }
 
 function render_move(li){
-  board.replaceAt(li[1],board[li[0]]);
-  board.replaceAt(li[0],'.');
+  board=board.replaceAt(li[1],board[li[0]]);
+  board=board.replaceAt(li[0],'.');
+  return board;
 }
 
 function main_loop(board){
   print_board(board);
   eval_board(board);
-  render_move(interpret_coord(prompt_move()));
+  board=render_move(interpret_coord(prompt_move()));
   print_board(board);
   //console.log(gen_moves(board));
 }
