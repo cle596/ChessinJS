@@ -32,11 +32,13 @@ var m={
 var moves={
   "P":[m.UP,m.UP*2,m.UP+m.RIGHT,m.UP+m.LEFT],
   "p":[m.DOWN,m.DOWN*2,m.DOWN+m.RIGHT,m.DOWN+m.LEFT],
-  "N":[m.UP*2+m.RIGHT,m.UP+m.RIGHT*2,m.RIGHT*2+m.DOWN,m.RIGHT+m.DOWN*2,
+  "n":[m.UP*2+m.RIGHT,m.UP+m.RIGHT*2,m.RIGHT*2+m.DOWN,m.RIGHT+m.DOWN*2,
     m.DOWN*2+m.LEFT,m.DOWN+m.LEFT*2,m.LEFT*2+m.UP,m.LEFT+m.UP*2],
-  "B":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT],
+  "b":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT],
   "r":[m.UP,m.RIGHT,m.DOWN,m.LEFT],
   "q":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT,
+    m.UP,m.RIGHT,m.DOWN,m.LEFT],
+  "k":[m.UP+m.RIGHT,m.DOWN+m.RIGHT,m.DOWN+m.LEFT,m.UP+m.LEFT,
     m.UP,m.RIGHT,m.DOWN,m.LEFT]
 };
 
@@ -181,10 +183,32 @@ function gen_moves(board){
   }
 }
 
+col={
+  "a":0,"b":1,"c":2,"d":3,
+  "e":4,"f":5,"g":6,"h":7
+};
+
+row={
+  "1":10,"2":20,"3":30,"4":40,
+  "5":50,"6":60,"7":70,"8":80
+};
+
+function interpret_coord(coord){
+  l=[];
+  l.push(col[coord[0]]+row[coord[1]]);
+  l.push(col[coord[2]]+row[coord[3]]);
+  return l;
+}
+
+function render_move(li){
+  board[li[1]]=board[li[0]];
+  board[li[0]]='.';
+}
+
 function main_loop(board){
   print_board(board);
   eval_board(board);
-  prompt_move();
+  render_move(interpret_coord(prompt_move()));
 }
 
 main_loop(board);
