@@ -127,7 +127,7 @@ function replace(x,mov){
 
 function not_rbq_empty_gen(piece,x,mov){
   gen=[];
-  if (!(piece in ["r","b","q"]) && space(x,mov)){
+  if (!(piece in ["R","r","B","b","Q","q"]) && space(x,mov)){
     gen.push(format_move(piece,x,mov));
   }
   return gen;
@@ -160,9 +160,11 @@ function nk_enemy(piece,x,mov){
 function rbq(piece,x,mov){
   gen=[];
   idx=1;
-  while (board[x+mov*idx]!='/'){
-    gen.push(enemy_gen(piece,x,mov*idx));
-    idx+=1;
+  if (piece in ['R','r','B','b','Q','q']){
+    while (board[x+mov*idx]!='/'){
+      gen.push(enemy_gen(piece,x,mov*idx));
+      idx+=1;
+    }
   }
   return gen;
 }
