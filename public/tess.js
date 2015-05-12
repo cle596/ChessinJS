@@ -125,38 +125,43 @@ function replace(x,mov){
   board[x]='.';
 }
 
-function not_rbq_empty_gen(gen,piece,x,mov){
+function not_rbq_empty_gen(piece,x,mov){
+  gen=[];
   if (!(piece in ["r","b","q"]) && space(x,mov)){
     gen.push(format_move(piece,x,mov));
   }
   return gen;
 }
 
-function enemy_gen(gen,piece,x,mov){
+function enemy_gen(piece,x,mov){
+  gen=[];
   if (enemy(piece,x,mov)){
     gen.push(format_move(piece,x,mov));
   }
   return gen;
 }
 
-function pawn_enemy(gen,piece,x,mov){
-  if (mov in moves[piece].slice(2,4)){
-    gen=enemy_gen(gen,piece,x,mov);
+function pawn_enemy(piece,x,mov){
+  gen=[];
+  if ((piece in ['P','p']) && (mov in moves[piece].slice(2,4))){
+    gen.push(enemy_gen(piece,x,mov));
   }
   return gen;
 }
 
-function nk_enemy(gen,piece,x,mov){
-  if (mov in moves[piece]){
-    gen=enemy_gen(gen,piece,x,mov);
+function nk_enemy(piece,x,mov){
+  gen=[];
+  if ((piece in ['N','n','K','k']) && (mov in moves[piece])){
+    gen.push(enemy_gen(piece,x,mov));
   }
   return gen;
 }
 
-function rbq(gen,piece,x,mov){
+function rbq(piece,x,mov){
+  gen=[];
   idx=1;
-  while (x+mov*idx!='/'){
-    gen=enemy_gen(gen,piece,x,mov*idx);
+  while (board[x+mov*idx]!='/'){
+    gen.push(enemy_gen(piece,x,mov*idx));
     idx+=1;
   }
   return gen;
@@ -165,12 +170,11 @@ function rbq(gen,piece,x,mov){
 function check(board,x,piece,moves){
   gen=[];
   for (m in moves){
-    not_rbq_empty_gen(gen,piece,x,moves[m]);
-    pawn_enemy(gen,piece,x,moves[m]);
-    nk_enemy(gen,piece,x,moves[m]);
-    rbq(gen,piece,x,moves[m]);
+    gen.push(not_rbq_empty_gen(piece,x,moves[m]));
+    gen.push(pawn_enemy(piece,x,moves[m]));
+    gen.push(nk_enemy(piece,x,moves[m]));
+    gen.push(rbq(piece,x,moves[m]));
   }
-  console.log(gen);
   return gen;
 }
 
