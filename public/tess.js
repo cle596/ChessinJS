@@ -136,7 +136,9 @@ function replace(x,mov){
 function nk_empty_gen(piece,x,mov){
   var gen;
   gen=[];
-  if ((piece in ["N","n","K","k"]) && space(x,mov)){
+  if (
+  ($.inArray(piece, ["N","n","K","k"])!=-1)
+  && space(x,mov)){
     gen.push(format_move(piece,x,mov));
   }
   return gen;
@@ -154,8 +156,8 @@ function enemy_gen(piece,x,mov){
 function pawn_empty_gen(piece,x,mov){
   var gen;
   gen=[];
-  console.log($.inArray(mov, moves[piece].slice(0,2)));
-  if ((piece in ["P","p"])
+  if (
+  ($.inArray(piece, ["P","p"])!=-1)
   && ($.inArray(mov, moves[piece].slice(0,2))!=-1)
   && space(x,mov)){
     console.log("pawn empty");
@@ -167,7 +169,9 @@ function pawn_empty_gen(piece,x,mov){
 function pawn_enemy(piece,x,mov){
   var gen;
   gen=[];
-  if ((piece in ['P','p']) && (mov in moves[piece].slice(2,4))
+  if (
+  $.inArray(piece, ['P','p']!=-1)
+  && ($.inArray(mov, moves[piece].slice(2,4))!=-1)
   && enemy(piece,x,mov)){
     gen.push(enemy_gen(piece,x,mov));
   }
@@ -177,7 +181,9 @@ function pawn_enemy(piece,x,mov){
 function nk_enemy(piece,x,mov){
   var gen;
   gen=[];
-  if ((piece in ['N','n','K','k']) && (mov in moves[piece])){
+  if (
+    ($.inArray(piece,['N','n','K','k']) !=-1)
+    && (mov in moves[piece])){
     gen.push(enemy_gen(piece,x,mov));
   }
   return gen;
@@ -187,7 +193,9 @@ function rbq(piece,x,mov){
   var gen;
   gen=[];
   idx=1;
-  if (piece in ['R','r','B','b','Q','q']){
+  if (
+    $.inArray(piece,['R','r','B','b','Q','q']) !=-1
+  ){
     while (board[x+mov*idx]!='/'){
       gen.push(enemy_gen(piece,x,mov*idx));
       idx+=1;
