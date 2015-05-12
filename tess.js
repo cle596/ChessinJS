@@ -92,7 +92,12 @@ function isUpperCase(str) {
 }
 
 function isLowerCase(str) {
-  return str === str.toLowerCase();
+  try{
+    return str === str.toLowerCase();
+  }
+  catch(err){
+    console.log(str);
+  }
 }
 
 function isPiece(str) {
@@ -124,7 +129,7 @@ function format_move(piece,x,mov){
   };
 }
 
-function replace(x,x+mov){
+function replace(x,mov){
   board[x+mov]=board[x];
   board[x]='.';
 }
@@ -181,6 +186,7 @@ function gen_moves(board){
       }
     }
   }
+  return gen;
 }
 
 col={
@@ -209,6 +215,7 @@ function main_loop(board){
   print_board(board);
   eval_board(board);
   render_move(interpret_coord(prompt_move()));
+  console.log(gen_moves(board));
 }
 
 main_loop(board);
