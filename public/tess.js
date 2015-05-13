@@ -259,7 +259,7 @@ function render_move(li){
 function print_gen(gen){
   console.log("there are "+gen.length+" moves gened");
   for (var x in gen){
-    console.log(gen[x]);
+    console.log(JSON.stringify(gen[x]));
   }
 }
 
