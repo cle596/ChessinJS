@@ -1,8 +1,4 @@
-String.prototype.replaceAt=function(index, character) {
-  return this.substr(0, index) + character + this.substr(index+character.length);
-};
-
-var CHESS=(function(){
+(function(){
   var board;
   board=
     "//////////"+
@@ -224,9 +220,13 @@ var CHESS=(function(){
     return l;
   };
 
+  var replaceAt=function(string,index, character) {
+    return string.substr(0, index) + character + string.substr(index+character.length);
+  };
+
   var render_move=function(li){
-    window.board=window.board.replaceAt(li[1],board[li[0]]);
-    window.board=window.board.replaceAt(li[0],'.');
+    board=replaceAt(board,li[1],board[li[0]]);
+    board=replaceAt(board,li[0],'.');
   };
   var print_gen=function(gen){
     console.log("there are "+gen.length+" moves gened");
@@ -246,6 +246,4 @@ var CHESS=(function(){
     main_loop(input);
   });
 
-});
-
-CHESS;
+})();
