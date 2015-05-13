@@ -237,7 +237,7 @@
   var main_loop=function(input){
     //eval_board();
     render_move(interpret_coord(input));
-    print_board();
+    console.log("");print_board();
     //print_gen(gen_moves(board));
   };
   $("#move").submit(function(e){
