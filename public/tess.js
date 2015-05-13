@@ -1,6 +1,7 @@
 
 
-var board=
+var board;
+board=
   "//////////"+
   "/rnbqkbnr/"+
   "/pppppppp/"+
@@ -45,7 +46,7 @@ var moves={
     m.UP,m.RIGHT,m.DOWN,m.LEFT]
 };
 
-function print_board(board){
+function print_board(){
   offset=11;
   i=offset;
   while(i<board.length-offset+1){
@@ -54,10 +55,9 @@ function print_board(board){
     console.log(s);
     i+=10;
   }
-  return board;
 }
 
-function eval_board(board){
+function eval_board(){
   score=0;
   ///material
   for (x=0;x<board.length;++x){
@@ -262,17 +262,15 @@ function print_gen(gen){
   }
 }
 
-function main_loop(board,input){
-  print_board(board);
-  eval_board(board);
+function main_loop(input){
+  //eval_board();
   board=render_move(interpret_coord(input));
-  print_board(board);
-  print_gen(gen_moves(board));
+  console.log(board);
+  //print_board();
+  //print_gen(gen_moves(board));
 }
 
-$(function(){
-  $("#move").submit(function(){
-    input=$(this).serializeArray()[0]["value"];
-    main_loop(board,input);
-  });
+$("#move").submit(function(){
+  input=$(this).serializeArray()[0]["value"];
+  main_loop(input);
 });
