@@ -166,7 +166,7 @@ function pawn_enemy(piece,x,mov){
   ($.inArray(piece, ['P','p'])!=-1)
   && ($.inArray(mov, moves[piece].slice(2,4))!=-1)
   && enemy(piece,x,mov)){
-    gen.push(enemy_gen(piece,x,mov));
+    gen.push.apply(gen,enemy_gen(piece,x,mov));
   }
   return gen;
 }
@@ -177,7 +177,7 @@ function nk_enemy(piece,x,mov){
   if (
     ($.inArray(piece,['N','n','K','k']) !=-1)
     && (mov in moves[piece])){
-    gen.push(enemy_gen(piece,x,mov));
+    gen.push.apply(gen,enemy_gen(piece,x,mov));
   }
   return gen;
 }
@@ -190,7 +190,7 @@ function rbq(piece,x,mov){
     $.inArray(piece,['R','r','B','b','Q','q']) !=-1
   ){
     while (board[x+mov*idx]!='/'){
-      gen.push(enemy_gen(piece,x,mov*idx));
+      gen.push.apply(gen,enemy_gen(piece,x,mov*idx));
       if (!space(x,mov*idx)){
         break;
       }
