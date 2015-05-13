@@ -164,8 +164,7 @@ function pawn_enemy(piece,x,mov){
   gen=[];
   if (
   ($.inArray(piece, ['P','p'])!=-1)
-  && ($.inArray(mov, moves[piece].slice(2,4))!=-1)
-  && enemy(piece,x,mov)){
+  && ($.inArray(mov, moves[piece].slice(2,4))!=-1)){
     gen.push.apply(gen,enemy_gen(piece,x,mov));
   }
   return gen;
@@ -175,8 +174,8 @@ function nk_enemy(piece,x,mov){
   var gen;
   gen=[];
   if (
-    ($.inArray(piece,['N','n','K','k']) !=-1)
-    && (mov in moves[piece])){
+  ($.inArray(piece,['N','n','K','k']) !=-1)
+  && ($.inArray(mov, moves[piece])!=-1)){
     gen.push.apply(gen,enemy_gen(piece,x,mov));
   }
   return gen;
