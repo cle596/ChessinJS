@@ -175,7 +175,7 @@ function nk_enemy(piece,x,mov){
   gen=[];
   if (
   ($.inArray(piece,['N','n','K','k']) !=-1)
-  && ($.inArray(mov, moves[piece])!=-1)){
+  && ($.inArray(x+mov, moves[piece])!=-1)){
     gen.push.apply(gen,enemy_gen(piece,x,mov));
   }
   return gen;
