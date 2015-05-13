@@ -72,7 +72,7 @@ function eval_board(board){
 
 function prompt_move(){
   ret=""
-  ret=prompt("your move: ");
+  ret=$("#submit").val();
   console.log(ret);
   return ret;
 }
@@ -262,12 +262,17 @@ function print_gen(gen){
   }
 }
 
-function main_loop(board){
+function main_loop(board,input){
   print_board(board);
   eval_board(board);
-  board=render_move(interpret_coord(prompt_move()));
+  board=render_move(interpret_coord(input));
   print_board(board);
   print_gen(gen_moves(board));
 }
 
-main_loop(board);
+$(function(){
+  $("#move").submit(function(){
+    input=$(this).serializeArray()[0]["value"];
+    main_loop(board,input);
+  });
+});
