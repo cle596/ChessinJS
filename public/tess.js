@@ -250,9 +250,8 @@ String.prototype.replaceAt=function(index, character) {
 }
 
 function render_move(li){
-  board=board.replaceAt(li[1],board[li[0]]);
-  board=board.replaceAt(li[0],'.');
-  return board;
+  window.board=window.board.replaceAt(li[1],board[li[0]]);
+  window.board=window.board.replaceAt(li[0],'.');
 }
 
 function print_gen(gen){
@@ -264,8 +263,7 @@ function print_gen(gen){
 
 function main_loop(input){
   //eval_board();
-  board=render_move(interpret_coord(input));
-  console.log(board);
+  render_move(interpret_coord(input));
   //print_board();
   //print_gen(gen_moves(board));
 }
