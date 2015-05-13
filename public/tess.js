@@ -240,10 +240,9 @@
     print_board();
     //print_gen(gen_moves(board));
   };
-
-  $("#move").submit(function(){
-    input=$(this).serializeArray()[0]["value"];
+  $("#move").submit(function(e){
+    e.preventDefault();
+    var input=$(this).serializeArray()[0]["value"];
     main_loop(input);
   });
-
 })();
