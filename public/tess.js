@@ -109,11 +109,13 @@
       return true;
     }
   };
-  var format_move=function(piece,x,mov){
+  var format_move=function(piece,x,mov,board){
+    var local_board = board;
     return {
       "piece":piece,
       "from":x,
-      "to":x+mov
+      "to":x+mov,
+      "board":render_move([x,x+mov],"local",local_board)
     };
   };
   var replace=function(x,mov){
@@ -126,7 +128,7 @@
     if (
     ($.inArray(piece, ["N","n","K","k"])!=-1)
     && space(x,mov)){
-      gen.push(format_move(piece,x,mov));
+      gen.push(format_move(piece,x,mov,board));
     }
     return gen;
   };
@@ -134,7 +136,7 @@
     var gen;
     gen=[];
     if (enemy(piece,x,mov)){
-      gen.push(format_move(piece,x,mov));
+      gen.push(format_move(piece,x,mov,board));
     }
     return gen;
   };
@@ -145,7 +147,7 @@
     ($.inArray(piece, ["P","p"])!=-1)
     && ($.inArray(mov, moves[piece].slice(0,2))!=-1)
     && space(x,mov)){
-      gen.push(format_move(piece,x,mov));
+      gen.push(format_move(piece,x,mov,board));
     }
     return gen;
   };
@@ -224,9 +226,16 @@
     return string.substr(0, index) + character + string.substr(index+character.length);
   };
 
-  var render_move=function(li){
-    board=replaceAt(board,li[1],board[li[0]]);
-    board=replaceAt(board,li[0],'.');
+  var render_move=function(li,opt,local_board){
+    if(opt=="global"){
+      board=replaceAt(board,li[1],board[li[0]]);
+      board=replaceAt(board,li[0],'.');
+    }
+    else if(opt=="local"){
+      local_board=replaceAt(local_board,li[1],local_board[li[0]]);
+      local_board=replaceAt(local_board,li[0],'.');
+      return local_board;
+    }
   };
   var print_gen=function(gen){
     console.log("there are "+gen.length+" moves gened");
@@ -234,11 +243,19 @@
       console.log(JSON.stringify(gen[x]));
     }
   };
+  var search=function(){
+    var gen1=[];var gen2=[];var gen3=[];
+    gen1=gen_moves(board);
+    for (i in gen1){
+      gen2.push.apply(gen2,gen_moves(gen1[i]["board"]));
+    }
+  };
   var main_loop=function(input){
     //eval_board();
-    render_move(interpret_coord(input));
+    render_move(interpret_coord(input),"global",null);
     console.log("");print_board();
     //print_gen(gen_moves(board));
+    search();
   };
   $("#move").submit(function(e){
     e.preventDefault();
