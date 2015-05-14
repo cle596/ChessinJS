@@ -60,15 +60,16 @@
     }
   };
   var eval_board=function(board){
-    score=0;
+    var score=0;
     ///material
-    for (x=0;x<board.length;++x){
+    for (var x=0;x<board.length;++x){
       for (k in key){
         if (board[k]==key[k]){
           score+=k;
         }
       }
     }
+    console.log(score);
     return score;
   };
   var prompt_move=function(){
@@ -109,13 +110,13 @@
       return true;
     }
   };
-  var format_move=function(piece,x,mov,board){
-    var local_board = board;
+  var format_move=function(piece,x,mov,local_board){
     var data_object={};
     data_object["piece"]=piece;
     data_object["from"]=x;
     data_object["to"]=x+mov;
     data_object["board"]=render_move([x,x+mov],"local",local_board);
+    //data_object["score"]=eval_board(data_object["board"]);
     return data_object;
   };
   var replace=function(x,mov){
