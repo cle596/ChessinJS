@@ -12,8 +12,8 @@
     "/RNBQKBNR/"+
     "//////////";
   var key={
-    "p":1,"n":3,"b":5,"r":7,"q":20,"k":100,
-    "P":-1,"N":-3,"B":-5,"R":-7,"Q":-20,"K":-100
+    "1":"p","3":"n","5":"n","7":"n","20":"q","100":"k",
+    "-1":"P","-3":"N","-5":"B","-7":"R","-20":"Q","-100":"K"
   };
   var m={
     "UP":-10,
@@ -59,13 +59,13 @@
       i+=10;
     }
   };
-  var eval_board=function(){
+  var eval_board=function(board){
     score=0;
     ///material
     for (x=0;x<board.length;++x){
-      for (property in key){
-        if (board[x]==property){
-          score+=key[property];
+      for (k in key){
+        if (board[k]==key[k]){
+          score+=k;
         }
       }
     }
@@ -111,12 +111,12 @@
   };
   var format_move=function(piece,x,mov,board){
     var local_board = board;
-    return {
-      "piece":piece,
-      "from":x,
-      "to":x+mov,
-      "board":render_move([x,x+mov],"local",local_board)
-    };
+    var data_object={};
+    data_object["piece"]=piece;
+    data_object["from"]=x;
+    data_object["to"]=x+mov;
+    data_object["board"]=render_move([x,x+mov],"local",local_board);
+    return data_object;
   };
   var replace=function(x,mov){
     board[x+mov]=board[x];
@@ -255,7 +255,7 @@
     search_push(gen2,gen1);
     search_push(gen3,gen2);
     search_push(gen4,gen3);
-    console.log("done searchin");
+    console.log("done");
   };
   var main_loop=function(input){
     //eval_board();
