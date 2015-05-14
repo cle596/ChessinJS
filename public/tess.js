@@ -243,12 +243,19 @@
       console.log(JSON.stringify(gen[x]));
     }
   };
+  var search_push=function(gen_cur,gen_prev){
+    for (i in gen_prev){
+      gen_cur.push.apply(gen_cur,gen_moves(gen_prev[i]["board"]));
+    }
+  };
   var search=function(){
     var gen1=[];var gen2=[];var gen3=[];
+    var gen4=[];var gen5=[];var gen6=[];
     gen1=gen_moves(board);
-    for (i in gen1){
-      gen2.push.apply(gen2,gen_moves(gen1[i]["board"]));
-    }
+    search_push(gen2,gen1);
+    search_push(gen3,gen2);
+    search_push(gen4,gen3);
+    console.log("done searchin");
   };
   var main_loop=function(input){
     //eval_board();
